@@ -7,6 +7,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float moveSpeed;
 
+    [SerializeField]
+    private GameObject weapon;
+
+    [SerializeField]
+    private Transform shootTransform;
+
+    [SerializeField]
+    private float shootInterval = 0.05f;
+    private float lastShootTime = 0f;
+
     void Update()
     {
         // float horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -30,5 +40,25 @@ public class Player : MonoBehaviour
         float toX = Mathf.Clamp(mousePos.x, -2.35f, 2.35f);
         transform.position = new Vector3(toX, transform.position.y, transform.position.z);
 
+        Shoot();
+
+    }
+    void Shoot()
+    {
+        if (Time.time - lastShootTime > shootInterval)
+        {
+            Instantiate(weapon, shootTransform.position, Quaternion.identity);
+            lastShootTime = Time.time;
+
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Game Over");
+            Destroy(gameObject);
+        }
     }
 }
