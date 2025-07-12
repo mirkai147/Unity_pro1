@@ -58,6 +58,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boss")

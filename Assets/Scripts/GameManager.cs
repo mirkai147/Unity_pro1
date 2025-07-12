@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private TextMeshProUGUI text;
+
+    [SerializeField]
+    private GameObject gameOverPanel;
 
     private int coin = 0;
 
@@ -23,6 +27,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     public void IncreaseCoin()
     {
         coin += 1;
@@ -38,6 +43,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [System.Obsolete]
     public void SetGameOver()
     {
         isGameOver = true;
@@ -46,5 +52,17 @@ public class GameManager : MonoBehaviour
         {
             enemySpawner.StopEnemyRoutine();
         }
+
+        Invoke("ShowGameOverPanel", 1f);
+    }
+
+    void ShowGameOverPanel()
+    {
+        gameOverPanel.SetActive(true);
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }
