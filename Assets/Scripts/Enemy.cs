@@ -5,6 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField]
+    private GameObject coin;
+
+    [SerializeField]
     private float moveSpeed = 10f;
 
     private float minY = -7;
@@ -34,7 +37,12 @@ public class Enemy : MonoBehaviour
             hp -= weapon.damage;
             if (hp <= 0)
             {
+                if (gameObject.tag == "Boss")
+                {
+                    GameManager.instance.SetGameOver();
+                }
                 Destroy(gameObject);
+                Instantiate(coin, transform.position, Quaternion.identity);
             }
             Destroy(other.gameObject);
         }

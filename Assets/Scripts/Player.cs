@@ -8,7 +8,8 @@ public class Player : MonoBehaviour
     private float moveSpeed;
 
     [SerializeField]
-    private GameObject weapon;
+    private GameObject[] weapons;
+    private int weaponIndex = 0;
 
     [SerializeField]
     private Transform shootTransform;
@@ -40,25 +41,43 @@ public class Player : MonoBehaviour
         float toX = Mathf.Clamp(mousePos.x, -2.35f, 2.35f);
         transform.position = new Vector3(toX, transform.position.y, transform.position.z);
 
-        Shoot();
+        if (GameManager.instance.isGameOver == false)
+        {
+            Shoot();
+        }
+        
 
     }
     void Shoot()
     {
         if (Time.time - lastShootTime > shootInterval)
         {
-            Instantiate(weapon, shootTransform.position, Quaternion.identity);
+            Instantiate(weapons[weaponIndex], shootTransform.position, Quaternion.identity);
             lastShootTime = Time.time;
 
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" || other.gameObject.tag == "Boss")
         {
-            Debug.Log("Game Over");
+            GameManager.instance.SetGameOver();
             Destroy(gameObject);
+        }
+        else if (other.gameObject.tag == "Coin")
+        {
+            GameManager.instance.IncreaseCoin();
+            Destroy(other.gameObject);
+        }
+    }
+
+    public void Upgrade()
+    {
+        weaponIndex += 1;
+        if (weaponIndex >= weapons.Length)
+        {
+            weaponIndex = weapons.Length - 1;
         }
     }
 }
